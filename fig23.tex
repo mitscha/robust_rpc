@@ -1,0 +1,87 @@
+\documentclass[sansserif,mathserif]{article}
+\usepackage{pgf,tikz}
+\usepackage{pgfplots}
+\usepackage{amsmath}
+
+
+\usetikzlibrary{calc,shadows}
+\usetikzlibrary{pgfplots.groupplots}
+\newcommand{\mat}[1]{\mathbf{#1}}  
+
+\pgfplotsset{width=7cm,compat=1.3}
+
+\newcommand{\labelsize}{\small}
+\newcommand{\powpar}[2]{{#1}^{(#2)}}
+
+\pagestyle{empty}
+\begin{document}
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[scale=0.8] 
+    
+    \begin{axis}[name=plot1,
+        	xlabel={\footnotesize $f$},
+    	width=0.9\columnwidth,
+	height = 0.45\columnwidth,
+	ymin = 0,
+	ymax = 5,
+	legend entries={ {$s_{0.6,0.4\pi}$}, {$s_{0.8,0.4\pi}$},{$s_{0.6,0.7\pi}$},{$s_{0.8,0.7\pi}$},},
+	xticklabel style={font=\footnotesize,},
+	yticklabel style={font=\footnotesize,},
+    	legend style={
+                    font=\tiny,}
+         ]
+	{
+		\addplot +[mark=none,solid,black] table[x index=0,y index=1]{psds.dat};
+		\addplot +[mark=none,dashdotted,black] table[x index=0,y index=2]{psds.dat};
+		\addplot +[mark=none,dashed,black] table[x index=0,y index=3]{psds.dat};
+		\addplot +[mark=none,dotted,black] table[x index=0,y index=4]{psds.dat};
+		}
+	\end{axis}
+    \end{tikzpicture}
+    \caption{\label{fig:psdexamples} Example PSDs.}
+\end{figure}
+
+\renewcommand{\labelsize}{\scriptsize}
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[scale = 1]
+\begin{groupplot}[group style={group size=3 by 4,horizontal sep=0.08\columnwidth,vertical sep=0.12\columnwidth,xlabels at=edge bottom, ylabels at=edge left},
+x label style={at={(axis description cs:0.5,-0.35)},anchor=north},
+width=0.34\columnwidth, /tikz/font=\footnotesize, colormap/blackwhite, view={0}{90}, point meta min=0.0, point meta max=0.5, minor tick num=4] %, xlabel=$M$, ylabel=$d(X,Y)$
+\nextgroupplot[title = NNPC, xlabel={\labelsize $\sigma$}, ylabel={\labelsize $d(X^{(1)},X^{(2)})$}]
+\addplot3[surf, shader=flat] file {cesnnpc-distsigman.dat};
+\nextgroupplot[title = KM, xlabel={\labelsize $\sigma$}] %, ylabel={\labelsize $d(X^{(1)},X^{(2)})$}
+\addplot3[surf, shader=flat] file {ceskm-distsigman.dat};
+\nextgroupplot[title = KMit, colorbar, xlabel={\labelsize $\sigma$}] %, ylabel={\labelsize $d(X^{(1)},X^{(2)})$}
+\addplot3[surf, shader=flat] file {ceskmfp-distsigman.dat};
+
+\nextgroupplot[xlabel={\labelsize $M$}, ylabel={\labelsize $d(X^{(1)},X^{(2)})$}] % title = NNPC, 
+\addplot3[surf, shader=flat] file {cesnnpc-distobslen.dat};
+\nextgroupplot[xlabel={\labelsize $M$}] %title = KM, 
+\addplot3[surf, shader=flat] file {ceskm-distobslen.dat};
+\nextgroupplot[colorbar, xlabel={\labelsize $M$}] %title = KMit, 
+\addplot3[surf, shader=flat] file {ceskmfp-distobslen.dat};
+
+\nextgroupplot[xlabel={\labelsize $M$}, ylabel={\labelsize $\sigma$}] % title = NNPC, 
+\addplot3[surf, shader=flat] file {cesnnpc-obslensigman.dat};
+\nextgroupplot[xlabel={\labelsize $M$}] %title = KM, 
+\addplot3[surf, shader=flat] file {ceskm-obslensigman.dat};
+\nextgroupplot[colorbar, xlabel={\labelsize $M$}] %title = KMit, 
+\addplot3[surf, shader=flat] file {ceskmfp-obslensigman.dat};
+
+
+\nextgroupplot[xlabel={\labelsize $M$}, ylabel={\labelsize $1/p$}] % title = NNPC, 
+\addplot3[surf, shader=flat] file {cesnnpc-obslenp.dat};
+\nextgroupplot[xlabel={\labelsize $M$}] %title = KM, 
+\addplot3[surf, shader=flat] file {ceskm-obslenp.dat};
+\nextgroupplot[colorbar, xlabel={\labelsize $M$}] %title = KMit, 
+\addplot3[surf, shader=flat] file {ceskmfp-obslenp.dat};
+
+\end{groupplot}
+\end{tikzpicture}
+\caption{\label{fig:phasediag} Results of the synthetic data experiment. First row: CE (color-coded) as a function of $\sigma$ and $d(\powpar{X}{1},\powpar{X}{2})$ for $M = 400$ and $p = 1$. Second row: CE (color-coded) as a function of $M$ and $d(\powpar{X}{1},\powpar{X}{2})$ for $\sigma = 0.5$ and $p =1$. Third row: CE (color-coded) as a function of $M$ and $\sigma$ for $\nu_2 = 0.62 \pi$ ($d(\powpar{X}{1},\powpar{X}{2}) \approx 0.2$) and $p = 1$. Bottom row: CE (color-coded) as a function of $M$ and $1/p$ for $\nu_2 = 0.62 \pi$ and $\sigma = 0.5$.}
+\end{figure}
+\end{document}
